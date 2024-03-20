@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	"RSS-Aggregator/internal/database"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
@@ -38,7 +40,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Can't connect to database", err)
 	}
-	
+
 	apiCfg := apiConfig{
 		DB: database.New(conn),
 	}
@@ -57,8 +59,10 @@ func main() {
 	v1Router := chi.NewRouter()
 	v1Router.Get("/healthz", handlerReadiness)
 	v1Router.Get("/err", handlerError)
-  v1Router.Post("/users", apiCfg.handlerCreateUser) 
-  v1Router.Get("/users",apiCfg.handlerGetUser)
+	v1Router.Post("/users", apiCfg.handlerCreateUser)
+	v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUser))
+	v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerCreateFeed))
+	v1Router.Get("/feeds", apiCfg.handlerListFeed)
 
 	router.Mount("/v1", v1Router)
 	srv := &http.Server{

@@ -1,13 +1,12 @@
 package main
 
 import (
-	"RSS-Aggregator/internal/auth"
-	"RSS-Aggregator/internal/database"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
 
+	"RSS-Aggregator/internal/database"
 	"github.com/google/uuid"
 )
 
@@ -30,7 +29,6 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		UpdatedAt: time.Now().UTC(),
 		Name:      params.Name,
 	})
-
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Cannot create user", err))
 	}
@@ -38,21 +36,6 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 	respondWithJson(w, 200, dbUsertoUser(dbUser))
 }
 
-func (apiCfg *apiConfig) handlerGetUser( w http.ResponseWriter, r * http.Request) {
-  
-  apiKey,err :=  auth.GetApiKey(r.Header)
-
-  if err != nil {
-    respondWithError(w, 500 , fmt.Sprintf("Auth error: %v",err))
-  }
-  
-  dbUser, err := apiCfg.DB.GetUserByApiKey(r.Context(), apiKey)
-  
-  if err != nil {
-    respondWithError(w, 400, fmt.Sprintf("Couldn't get user %v",err))
-  }
-
-  respondWithJson(w,200,dbUsertoUser(dbUser))
-
+func (apiCfg *apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request, dbUser database.User) {
+	respondWithJson(w, 200, dbUsertoUser(dbUser))
 }
-

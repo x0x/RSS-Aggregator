@@ -13,9 +13,9 @@ func GetApiKey(headers http.Header) (string, error) {
 		return "", errors.New("No authentication info")
 	}
 
-  vals := strings.Split(val, " ")
+	vals := strings.Split(val, " ")
 
-  if len(vals) != 2 {
+	if len(vals) != 2 {
 		return "", errors.New("Malformed auth headers")
 	}
 
