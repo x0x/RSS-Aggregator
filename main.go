@@ -1,12 +1,13 @@
 package main
 
 import (
-	"RSS-Aggregator/internal/database"
 	"database/sql"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"RSS-Aggregator/internal/database"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -19,9 +20,7 @@ type apiConfig struct {
 }
 
 func main() {
-  
-  err := godotenv.Load(".env")
-
+	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -47,7 +46,7 @@ func main() {
 		DB: database.New(conn),
 	}
 
-  go startScraping(apiCfg.DB, 10, time.Minute )
+	go startScraping(apiCfg.DB, 10, time.Minute)
 
 	router := chi.NewRouter()
 
@@ -70,7 +69,7 @@ func main() {
 	v1Router.Post("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerFeedFollowCreate))
 	v1Router.Delete("/feed_follows/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFeedFollows))
 	v1Router.Get("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerGetFeedFollows))
-
+	v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlerGetPosts))
 	router.Mount("/v1", v1Router)
 	srv := &http.Server{
 		Handler: router,
