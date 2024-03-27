@@ -15,7 +15,7 @@ func (apiCfg *apiConfig) middlewareAuth(handler authedHandler) http.HandlerFunc 
 		apiKey, err := auth.GetApiKey(r.Header)
 		if err != nil {
 			respondWithError(w, http.StatusUnauthorized, fmt.Sprintf("Auth error: %v", err))
-      return
+			return
 		}
 
 		dbUser, err := apiCfg.DB.GetUserByApiKey(r.Context(), apiKey)

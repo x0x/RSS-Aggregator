@@ -1,12 +1,12 @@
 package main
 
 import (
+	"RSS-Aggregator/internal/database"
 	"database/sql"
 	"log"
 	"net/http"
 	"os"
-
-	"RSS-Aggregator/internal/database"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -19,7 +19,9 @@ type apiConfig struct {
 }
 
 func main() {
-	err := godotenv.Load(".env")
+  
+  err := godotenv.Load(".env")
+
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -44,6 +46,8 @@ func main() {
 	apiCfg := apiConfig{
 		DB: database.New(conn),
 	}
+
+  go startScraping(apiCfg.DB, 10, time.Minute )
 
 	router := chi.NewRouter()
 
