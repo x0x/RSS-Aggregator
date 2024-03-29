@@ -13,6 +13,7 @@ import (
 func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
 		Name string `json:"name"`
+		Role string `json:"role"`
 	}
 
 	params := parameters{}
@@ -28,6 +29,7 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
 		Name:      params.Name,
+		Role:      params.Role,
 	})
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Cannot create user", err))

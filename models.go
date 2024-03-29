@@ -13,6 +13,7 @@ type User struct {
 	Updated_at time.Time `json:"updated_at"`
 	Name       string    `json:"name"`
 	ApiKey     string    `json:"api_key"`
+  Role string `json:"role"`
 }
 
 type Feed struct {
@@ -50,6 +51,7 @@ func dbUsertoUser(dbUser database.User) User {
 		Updated_at: dbUser.UpdatedAt,
 		Name:       dbUser.Name,
 		ApiKey:     dbUser.ApiKey,
+    Role : dbUser.Role,
 	}
 }
 

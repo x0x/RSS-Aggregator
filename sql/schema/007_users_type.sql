@@ -1,0 +1,5 @@
+-- +goose UP
+ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'PUBLIC';
+
+-- +goose Down
+ALTER TABLE users DROP COLUMN role;
